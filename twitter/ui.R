@@ -1,3 +1,9 @@
+library(shiny)
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(stringr)
+
 ui <- fluidPage(
   titlePanel("Twitter Username Stories"),
   tabsetPanel(
@@ -19,7 +25,13 @@ ui <- fluidPage(
               )
              ),
     
-    tabPanel("Retweet Activity"),
+    tabPanel("Retweet Activity",
+             mainPanel(
+               dataTableOutput(
+                 outputId = "retweets"
+               )
+             )
+             ),
     
     tabPanel("Popular Advertisements & Topics"),
     

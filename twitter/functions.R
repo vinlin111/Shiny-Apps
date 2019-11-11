@@ -1,12 +1,17 @@
 
 # twitter scrape by username application ----------------------------------
 
+library(shiny)
 library(tidyverse)
+library(kableExtra)
 library(ggplot2)
+library(stringr)
 library(twitteR)
-library(rtweet)
-library(ggpubr)
-library(plotly)
+library(RCurl)
+library(httr)
+library(wordcloud)
+library(tm)
+library(syuzhet)
 
 
 twitter_info <- function(username, number_of_tweets){

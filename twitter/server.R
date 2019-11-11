@@ -1,3 +1,15 @@
+library(shiny)
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(stringr)
+library(twitteR)
+library(RCurl)
+library(httr)
+library(wordcloud)
+library(tm)
+library(syuzhet)
+
 server <- function(input, output){
   
   artist_info <- reactive({

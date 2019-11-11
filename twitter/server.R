@@ -20,7 +20,7 @@ server <- function(input, output){
     artist_info_activity() 
   })
   
-  output$retweets <- renderDataTable({
+  output$retweets <- renderDataTable({ 
     artist_retweet()
   }, options = list(pageLength = 10))
   

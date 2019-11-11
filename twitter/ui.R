@@ -3,6 +3,12 @@ library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(stringr)
+library(twitteR)
+library(RCurl)
+library(httr)
+library(wordcloud)
+library(tm)
+library(syuzhet)
 
 ui <- fluidPage(
   titlePanel("Twitter Username Stories"),

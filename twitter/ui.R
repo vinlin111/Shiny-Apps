@@ -3,12 +3,12 @@ library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(stringr)
-library(twitteR)
 library(RCurl)
 library(httr)
 library(wordcloud)
 library(tm)
 library(syuzhet)
+library(rtweet)
 
 ui <- fluidPage(
   titlePanel("Twitter Username Stories"),
@@ -18,7 +18,10 @@ ui <- fluidPage(
                sidebarPanel(
                  textInput(inputId = "user",
                            label = "username/screen name",
-                           value = "brysontiller")
+                           value = "brysontiller"),
+                 numericInput(inputId = "num_tweets",
+                              label = "max number of tweets scraped",
+                              value = "100")
                ),
                mainPanel(
                  tableOutput(

@@ -3,7 +3,7 @@ library(tidyverse)
 library(kableExtra)
 library(ggplot2)
 library(stringr)
-library(twitteR)
+library(rtweet)
 library(RCurl)
 library(httr)
 library(wordcloud)
@@ -17,7 +17,7 @@ server <- function(input, output){
   })
   
   artist_info_activity <- reactive({
-    twitter_info(input$user, 10)
+    twitter_info(input$user, number_of_tweets = input$num_tweets)
   })
   
   artist_retweet <- reactive({

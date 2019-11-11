@@ -9,6 +9,7 @@ library(httr)
 library(wordcloud)
 library(tm)
 library(syuzhet)
+library(plotly)
 
 server <- function(input, output){
   

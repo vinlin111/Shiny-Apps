@@ -12,6 +12,7 @@ library(httr)
 library(wordcloud)
 library(tm)
 library(syuzhet)
+library(plotly)
 
 
 twitter_info <- function(username, number_of_tweets){
@@ -63,8 +64,10 @@ clean_twitter <- function(user){
   return(t)
 }
 
-tweet_sentiment <- function(df_text){
-  emotion <- get_nrc_sentiment(df_text)
+# df is the username
+tweet_sentiment <- function(df){
+  emotion <- clean_twitter(df)
+  emotion <- get_nrc_sentiment(emotion$text)
   emotion_bars <- colSums(emotion)
   emotion_summation <- data.frame(
     count = emotion_bars,
@@ -75,9 +78,12 @@ tweet_sentiment <- function(df_text){
   return(emotion_summation)
 }
 
+
 # follower count = twitter_summary()$followers_count
 
 
 # mentions_screen_name: name of person who is mentioned in tweet ----------
 
-
+p <- plot_ly(tweet_sentiment("brysontiller"), x=~emotion, y=~count, type="bar", color=~emotion) %>%
+  layout(xaxis=list(title=""), showlegend=FALSE,
+         title="Emotion Type for hashtag: #RoyalWedding")

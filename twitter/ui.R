@@ -9,6 +9,7 @@ library(wordcloud)
 library(tm)
 library(syuzhet)
 library(rtweet)
+library(plotly)
 
 ui <- fluidPage(
   titlePanel("Twitter Username Stories"),

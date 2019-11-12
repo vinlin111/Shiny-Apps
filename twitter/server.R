@@ -11,6 +11,9 @@ library(tm)
 library(syuzhet)
 library(plotly)
 
+source("~/rshiny_apps/shiny-apps/twitter/functions.R")
+load("~/rshiny_apps/shiny-apps/twitter/envi.RData")
+
 server <- function(input, output){
   
   artist_info <- reactive({

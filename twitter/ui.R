@@ -11,6 +11,10 @@ library(syuzhet)
 library(rtweet)
 library(plotly)
 
+source("~/rshiny_apps/shiny-apps/twitter/functions.R")
+load("~/rshiny_apps/shiny-apps/twitter/envi.RData")
+
+
 ui <- fluidPage(
   titlePanel("Twitter Username Stories"),
   tabsetPanel(

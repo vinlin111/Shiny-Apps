@@ -50,44 +50,60 @@ twitter_is_retweet <- function(user){
   return(rt)
 }
 
-clean_twitter <- function(user){
-  t <- twitter_info(user) %>%
-    filter(is_retweet == FALSE) %>%
-    select("text")
-  # cleaning the data
-  t$text <- gsub("http.*","", t$text)
-  t$text <- gsub("https.*", "", t$text)
-  t$text <- gsub("#.*", "", t$text)
-  t$text <- gsub("@.*", "", t$text)
-  t <- t %>% 
-    filter(nchar(text) >= 1)
-  return(t)
-}
-
-# df is the username
-tweet_sentiment <- function(df){
-  emotion <- clean_twitter(df)
-  emotion <- get_nrc_sentiment(emotion$text)
-  emotion_bars <- colSums(emotion)
-  emotion_summation <- data.frame(
-    count = emotion_bars,
-    emotion = names(emotion_bars)
+create_word_cloud <- function(screen_name, number_of_tweets){
+  user_info <- get_timeline(user = screen_name, n = number_of_tweets)
+  user_tweets <- user_info %>%
+    filter(is_retweet == FALSE)
+  user_tweets$text <- gsub("http.*", "", user_tweets$text)
+  user_tweets$text <- gsub("https.*", "", user_tweets$text)
+  user_tweets$text <- gsub("#.*", "", user_tweets$text)
+  user_tweets$text <- gsub("@.*", "", user_tweets$text)
+  
+  emotions <- get_nrc_sentiment(user_tweets$text)
+  
+  tweet_wordcloud <- c(
+    paste(user_tweets$text[emotions$anger > 0], collapse = " "),
+    paste(user_tweets$text[emotions$anticipation > 0], collapse = " "),
+    paste(user_tweets$text[emotions$disgust > 0], collapse = " "),
+    paste(user_tweets$text[emotions$fear > 0], collapse = " "),
+    paste(user_tweets$text[emotions$joy > 0], collapse = " "),
+    paste(user_tweets$text[emotions$sadness > 0], collapse = " "),
+    paste(user_tweets$text[emotions$surprise > 0], collapse = " "),
+    paste(user_tweets$text[emotions$trust > 0], collapse = " ")
   )
-  emotion_summation$emotion <- factor(emotion_summation$emotion,
-                                      levels = emotion_summation$emotion[order(emotion_summation$count, decreasing = TRUE)])
-  return(emotion_summation)
+  
+  # create corpus
+  corpus = Corpus(VectorSource(tweet_wordcloud))
+  
+  # remove punctuation, stop words, and make lower case
+  corpus <- tm_map(corpus, tolower)
+  corpus <- tm_map(corpus, removePunctuation)
+  corpus <- tm_map(corpus, removeWords, c(stopwords("english")))
+  corpus <- tm_map(corpus, stemDocument)
+  
+  # create dtm
+  tdm <- TermDocumentMatrix(corpus)
+  
+  # convert as matrix
+  tdm <- as.matrix(tdm)
+  tdm_new <- tdm[nchar(rownames(tdm)) < 11,]
+  
+  # column name binding
+  colnames(tdm) <- c("anger",
+                     "anticipation",
+                     "disgust",
+                     "fear",
+                     "joy",
+                     "sadness",
+                     "surprise",
+                     "trust")
+  colnames(tdm_new) <- colnames(tdm)
+  comparison.cloud(tdm_new,
+                   random.order = FALSE,
+                   colors = c("#00B2FF", "red", "#FF0099", "#6600CC", "green", "orange", "blue", "brown"),
+                   title.size = 1,
+                   max.words = 250,
+                   scale = c(2.5, 0.4),
+                   rot.per = 0.4)
 }
-
-# plot tweet emotions from tweet_sentiment()
-plot_emotion <- function(emotion_df){
-  p <- plot_ly(emotion_df, x=~emotion, y=~count, type="bar", color=~emotion) %>%
-    layout(xaxis=list(title=""), showlegend=FALSE,
-           title="Tweet emotions")
-  return(p)
-}
-
-# follower count = twitter_summary()$followers_count
-
-
-# mentions_screen_name: name of person who is mentioned in tweet ----------
 

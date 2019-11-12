@@ -51,7 +51,7 @@ twitter_is_retweet <- function(user){
 }
 
 clean_twitter <- function(user){
-  t <- twitter_info(user, number_of_tweets = 10000) %>%
+  t <- twitter_info(user) %>%
     filter(is_retweet == FALSE) %>%
     select("text")
   # cleaning the data
@@ -59,7 +59,7 @@ clean_twitter <- function(user){
   t$text <- gsub("https.*", "", t$text)
   t$text <- gsub("#.*", "", t$text)
   t$text <- gsub("@.*", "", t$text)
-  t %>% 
+  t <- t %>% 
     filter(nchar(text) >= 1)
   return(t)
 }
@@ -78,12 +78,16 @@ tweet_sentiment <- function(df){
   return(emotion_summation)
 }
 
+# plot tweet emotions from tweet_sentiment()
+plot_emotion <- function(emotion_df){
+  p <- plot_ly(emotion_df, x=~emotion, y=~count, type="bar", color=~emotion) %>%
+    layout(xaxis=list(title=""), showlegend=FALSE,
+           title="Tweet emotions")
+  return(p)
+}
 
 # follower count = twitter_summary()$followers_count
 
 
 # mentions_screen_name: name of person who is mentioned in tweet ----------
 
-p <- plot_ly(tweet_sentiment("brysontiller"), x=~emotion, y=~count, type="bar", color=~emotion) %>%
-  layout(xaxis=list(title=""), showlegend=FALSE,
-         title="Emotion Type for hashtag: #RoyalWedding")

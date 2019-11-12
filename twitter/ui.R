@@ -45,6 +45,22 @@ ui <- fluidPage(
     
     tabPanel("Popular Advertisements & Topics"),
     
-    tabPanel("Sentiment Analysis")
+    tabPanel("Sentiment Analysis",
+             sidebarLayout(
+               sidebarPanel(
+                 numericInput(inputId = "sent_n_tweets",
+                               label = "number of tweets used",
+                               value = 100)
+               ),
+               mainPanel(
+                 dataTableOutput(
+                   outputId = "sentiment"
+                 ), br(), br(),
+                 plotlyOutput(
+                   outputId = "sentiment_plot"
+                 )
+               )
+             )
+            )
   )
 )

@@ -80,7 +80,7 @@ server <- function(input, output){
                                         levels = emotion_summation$emotion[order(emotion_summation$count, decreasing = TRUE)])
     plot_ly(emotion_summation, x=~emotion, y=~count, type="bar", color=~emotion) %>%
       layout(xaxis=list(title=""), showlegend=FALSE,
-             title="Tweet emotions")
+             title="tweet emotions")
   })
   
   output$sentiment <- renderDataTable({
